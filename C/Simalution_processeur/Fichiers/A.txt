@@ -1,0 +1,36 @@
+in r10
+in r11
+in r12
+in r13
+in r14  
+add r15,r0,#800
+stb (r15)#0,r10
+stb (r15)#1,r11
+stb (r15)#2,r12
+stb (r15)#3,r13
+stb (r15)#4,r14
+add r1,r0,#1600
+add r27,r0,#1600
+add r3,r0,#0
+loop: ldb r2,(r15)#0 
+add r15,r15,#1 
+add r25,r2,#0
+jzs fin 
+sub r31,r2,r3
+add r25,r31,#0
+jzs loop 
+stb (r1)#0,r2 
+add r3,r2,#0 
+add r1,r1,#1 
+jmp loop 
+fin: stb (r1)#0,r2
+ldb r2,(r27)#0
+out r2
+ldb r2,(r27)#1
+out r2
+ldb r2,(r27)#2
+out r2
+ldb r2,(r27)#3
+out r2
+hlt
+

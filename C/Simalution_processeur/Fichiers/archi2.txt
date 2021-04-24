@@ -1,0 +1,4 @@
+add r1,r0,#hFEE
+stw (r0)#500,r1
+ldb r3,(r0)#501
+out r3

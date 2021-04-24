@@ -1,0 +1,14 @@
+<1> rien
+<2> lot <vis> <3.4> <20> <5>
+<3> lot <vis> <3.4> <20> <8>
+<4> lot <planche> <3.4> <40> <10>
+<5> lot <plastique> <1> <15> <10>
+<6> meuble <stylet> <chambre> <100><plastique><2><vis><3>
+<7> lot <vis> <3.4> <20> <6>
+<8> meuble <chaise> <chambre> <5><planche><4><vis><10>
+<9> lot <verre> <1> <35> <10>
+<10> lot <planche> <3.4> <40> <8>
+<11> lot <verre> <1> <35> <20>
+<12> lot <vis> <1> <35> <25>
+<13> meuble <vitre><salon> <20><plastique><2><vis><10><verre><10><planche><3>
+<14>rien

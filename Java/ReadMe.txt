@@ -1,0 +1,73 @@
+Auteurs
+Soufiane BOUSTIQUE
+Raphaël MALAK
+
+################
+
+Projet JAVA-OBJET
+Consiste à gérer un entrepôt, en stockant des lots et construisant des meubles
+grâce à un personnel recruté, tout en maximisant les gains de l'entrepôt.
+
+################
+
+Compiler/tester
+
+Etape 0-------------------------------------------------------
+Si vous avez Eclipse IDE for Java Developers, lancez le.
+Allez dans File.
+Cliquez sur import en bas.
+Importez le package BIILIMO contenu dans l'archive.
+Allez à l'étape 2
+
+Etape 1-------------------------------------------------------
+Si vous n'avez pas Eclipse IDE for Java Developers, installez un JDK Java
+sur votre machine.
+Ouvrez votre terminal et rendez vous à l'adresse où se situe le package
+BIILIMO contenu dans l'archive (commande cd adresse).
+Allez à l'étape 2
+
+Etape 2-------------------------------------------------------
+Exécutez la classe Main.java .
+
+Entrez un réel strictement positif correspondant au nombre de rangées de
+l'entrepôt.
+Entrez un réel strictement positif correspondant au nombre de cases par
+rangée de l'entrepôt.
+Entrez un rationnel strictement positif correspondant à la trésorerie
+initiale de votre entrepôt.
+Entrez un entier strictement positif correspondant au nombre de types de
+lots différents de l'entrepôt. Il doit être inférieur ou égal au nombre
+de rangées fois le nombre de cases par rangées.
+Tapez 1 si vous voulez entrez vos types par fichier ou 0 par la console.
+Si c'est par fichier, votre fichier doit contenir 1 types par lignes, sans
+ligne vide. Pas de doublons acceptés et veillez à avoir le nombre de types
+précisé précédemment.
+Si c'est par la console, entrez les types un par un. Pas de doublons acceptés.
+Lire et exécuter les commandes souhaités dans le menu.
+
+Si vous choisissez la commande 1 du menu, chaque ligne de votre fichier
+suivra l’une des formes suivantes
+
+<id> rien
+<id> lot <nom> <poids> <prix> <volume>
+<id> meuble <nom> <pieceMaison> <duréeConstruction> <typeLot1> <volumeLot1> <typeLot2> <volumeLot2> ...
+
+Où:
+  --> Les id devront être des entiers positifs différents.
+  --> poids devra être un rationnel strictement positif.
+  --> prix devra être un rationnel strictement positif.
+  --> volume devra être un entier strictement positif.
+  --> pieceMaison devra être une des chaînes de caractères suivantes:
+             |-> "cuisine", "chambre", "salle a manger", "salon", "salle de bain", "WC"
+  --> duréeConstruction devra être un entier strictement positif.
+  --> Les typeLot devront être des types de lots que vous avez entrés en début de programme.Veillez à leur
+bonne orthographe. Pas de doublon autorisé. Chaque typeLot sera forcément suivi d'un volumeLot.
+  --> Les volumeLot devront être des entiers strictement positifs.
+  --> nom sera le nom de l'objet en consigne.
+  --> Veillez à gardez les caractères '<' et '>' ainsi que ne pas modifier les mots qui ne se trouvent pas
+entre ses 2 caractères.
+
+Si vous choisissez la commande 3 du menu, le fichier généré par le programme aura pour nom "consigneAleaX", où X
+est un numéro qui s'incrémente suivant si vous créez des fichiers aléatoires une ou plusieurs fois.
+
+###############
