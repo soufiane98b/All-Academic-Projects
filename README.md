@@ -1,11 +1,11 @@
 # All_Projects
 This directory contains all my projects:
--> In python :
+-> In python:
      - Morpion game
      - Used car price prediction with machine learning
 -> In C:
     - Simulation of natural selection
     - Simulation of a processor
     - Mini-Shell
--> In Java:
+    - -> In Java:
   - Program to manage the control of a warehouse by maximizing the profit.
