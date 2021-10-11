@@ -1,0 +1,131 @@
+Exercice 1 :
+
+1. ca affiche:
+
+42
+42
+24
+24
+24
+24
+
+car c'est le principe d'encapsulation .
+
+2. Dans fille il y a accés à toutes les méthodes mér, dans main la meme chose .
+
+3. ca affiche :
+42
+42
+24
+42
+42
+42
+
+Les méthodes statique se réferent toujours à la classe et non à l'objet.
+
+4. 
+
+42
+42
+24
+42
+42
+42
+
+Exercice 2 :
+
+1.
+Voici les erreurs de compilations:
+
+Ligne 36 : On doit changer la visibilité de la méthode e, mettre protected à la place.
+Ligne 40 : La méthode h dans la classe fille est héritée de Mere mais n'a pas le même type de retour, donc erreur, renommer la fonction.
+---------------------------------
+Explication :
+La redéfinition d'une méthode héritée doit impérativement conserver la déclaration de la méthode parent (type et nombre de paramètres, type de retour et les exceptions propagées doivent être identiques). Si la signature de la méthode change et/ou type de retour, ce n'est plus une redéfinition mais une surcharge. NB: une surcharge conserve le type de retour aussi , sinon non valide , renommer la fonction.
+---------------------------------
+
+Ligne 41 : Même type d'erreur que ligne 40 , exemple de remplacement : void i() {System.out.println("Fille_i");}
+Ligne 44 : Même chose , changez le type d'exception  , faut même chose que mère.
+Ligne 54 : La méthode miage() n'est pas définir dans mère donc erreur , il faut la définir.
+Ligne 56 : La variable mereFille est objet Fille mais de type mère donc il ne reconnait pas la méthode miage(), il faut donc changer le type de mereFille en Fille comme dans la ligne 57.
+Ligne 71 et 72 : la méthode d est de classe donc on y accède avec : Class.methode() et non Objet.methode(), c'est pas une erreur mais faut utiliser comme ça.
+
+
+2.
+3.
+La redéfinition d'une méthode héritée doit impérativement conserver la déclaration de la méthode parent (type et nombre de paramètres, type de retour et les exceptions propagées doivent être identiques). Si la signature de la méthode change et/ou type de retour, ce n'est plus une redéfinition mais une surcharge. NB: une surcharge conserve le type de retour aussi , sinon non valide , renommer la fonction.
+
+Methode redefini: a() , b() , c() , d() , f()
+Methode surcharge: c() , d() , g() , j() , l() , m()
+
+4. Affichage:
+fille.miage() -> Miage : rien de particulier
+ 
+(Fille)mereFille).miage() -> Miage. : mèreFille est devenue de type Fille donc peut accéder à la méthode dans Fille
+
+mere.a() -> Mere_a : rien de particulier 
+
+mereFille.a() -> Fille_a : mereFille est objet Fille donc accède à la méthode de Fille
+
+fille.a() -> Fille_a : rien de particulier
+
+((Mere)mereFille).a() -> Fille_a : il est déjà de type mère donc sert à rien, ce qui compte c'est l'objet qui est fille
+
+mereFille.b(null) -> Fille_b(Fille) : de meme objet fille 
+
+mereFille.c() -> Mere_c : à cause de la signature de methode c() existe que dans Mere
+
+mereFille.c(mere); -> Fille_c(Mere) : mereFille objet fille de type mere 
+
+mereFille.c(mereFille); -> Fille_c(Mere) : mereFille objet fille de type mere 
+mereFille.c(fille); -> Fille_c(Mere) : objet mereFille mais fille est de type fille et mere , il choisit mere , à comprendre ....
+
+fille.c(fille); -> Fille_c(Fille) : Normale
+
+mere.d(); -> static Mere_d : Normale
+
+mereFille.d(); -> static Mere_d : Car de type mere 
+
+mere.printF(); -> Mere_f : Normale
+
+mereFille.printF(); -> Mere_f : Normale car printF() n'existe pas dans Fille
+
+mereFille.j(); -> Fille_j : car objet fille 
+mereFille.k(); -> Mere_k : méthode dans fille supprimé car question 2
+mereFille.l(); -> Fille_l : Normale
+mereFille.m(); -> Fille_m : Normale 
+
+
+Exercice 3 :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
