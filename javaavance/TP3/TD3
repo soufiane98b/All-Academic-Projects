@@ -1,0 +1,26 @@
+Exercice 1:
+
+1. 
+   *La classe Graphics est la classe de base abstraite pour tous les contextes graphiques qui permettent à une application de dessiner sur des composants réalisés sur divers appareils, ainsi que sur des images hors écran.
+
+   *La classe Graphics2D étend la classe Graphics pour fournir un contrôle plus sophistiqué de la géométrie, des transformations de coordonnées, de la gestion des couleurs et de la mise en page du texte. Il s'agit de la classe fondamentale pour le rendu des formes, du texte et des images en deux dimensions sur la plate-forme Java.
+
+   *Un cadre ou "frame "est une fenêtre de niveau supérieur avec un titre et une bordure. C'est la fonction de Jframe qui
+   permet des les instancier.
+
+   *La classe JPanel fournit des conteneurs polyvalents pour les composants légers. Elles permettent d'ajouter des bordures et personnaliser leur peinture.
+
+5. 
+AWT et Swing sont deux boîtes à outils permettant de créer des interfaces utilisateur graphiques (IUG) riches. La principale différence entre AWT et Swing en Java est que AWT est la boîte à outils de fenêtrage, de graphiques et d'interface utilisateur dépendante de la plate-forme originale de Java, tandis que Swing est une boîte à outils d'interface utilisateur graphique pour Java qui est une extension de AWT.
+Les composants Java swing ne dépendent pas de la nature de la plate-forme. Ils sont purement criptés en Java.
+
+Exercice 2:
+
+1.
+	->une classe Point
+	->une classe Circle
+	->une classe Ring qui hérite de Circle
+
+
+Exercice 3:
+Je ne sais pas comment faire, 
