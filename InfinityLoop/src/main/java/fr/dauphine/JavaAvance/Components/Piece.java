@@ -16,6 +16,7 @@ public class Piece {
 	private boolean isFixed;
 
 	public Piece(int posY, int posX) {
+		isFixed=false;
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.VOID;
@@ -23,9 +24,12 @@ public class Piece {
 		this.connectors = type.setConnectorsList(Orientation.NORTH);
 		this.isFixed = isFixed(); // Is there any orientation for the piece
 		this.possibleOrientations = type.getListOfPossibleOri();
+		this.isFixed=true;
+		
 	}
 
 	public Piece(int posY, int posX, PieceType type, Orientation orientation) {
+		isFixed=false;
 		this.posX = posX;
 		this.posY = posY;
 		this.type = type;
@@ -33,9 +37,11 @@ public class Piece {
 		this.connectors = type.setConnectorsList(orientation);
 		this.isFixed = isFixed();
 		this.possibleOrientations = type.getListOfPossibleOri();
+		if(type==PieceType.VOID || type==PieceType.FOURCONN)this.isFixed=true;
 	}
 
 	public Piece(int posY, int posX, int typeValue, int orientationValue) {
+		isFixed=false;
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.getTypefromValue(typeValue);
@@ -43,6 +49,7 @@ public class Piece {
 		this.connectors = type.setConnectorsList(Orientation.getOrifromValue(orientationValue));
 		this.isFixed = isFixed();
 		this.possibleOrientations = type.getListOfPossibleOri();
+		if(typeValue==0 || typeValue==4)this.isFixed=true;
 	}
 
 	public void setPossibleOrientations(ArrayList<Orientation> possibleOrientations) {
@@ -72,9 +79,7 @@ public class Piece {
 	}
 
 	public boolean isFixed() {
-		//if(type==PieceType.VOID || type==PieceType.FOURCONN)return false;
-		//else {return true;}
-		return false;
+		return isFixed;
 	}
 
 	public int getPosX() { // get j
@@ -105,6 +110,11 @@ public class Piece {
 		this.orientation = type.getOrientation(Orientation.getOrifromValue(orientationValue));
 		this.connectors = type.setConnectorsList(this.orientation);
 	}
+	
+	public void setOrientation(Orientation orientationValue) {
+		this.orientation = orientationValue;
+		this.connectors = type.setConnectorsList(this.orientation);
+	}
 
 	public Orientation getOrientation() {
 		return orientation;
@@ -115,6 +125,7 @@ public class Piece {
 	}
 
 	public boolean hasTopConnector() {
+		if(this.type == PieceType.VOID)return false;
 		for (Orientation ori : this.getConnectors()) {
 			if (ori == Orientation.NORTH) {
 				return true;
@@ -124,6 +135,7 @@ public class Piece {
 	}
 
 	public boolean hasRightConnector() {
+		if(this.type == PieceType.VOID)return false;
 		for (Orientation ori : this.getConnectors()) {
 			if (ori == Orientation.EAST) {
 				return true;
@@ -133,6 +145,7 @@ public class Piece {
 	}
 
 	public boolean hasBottomConnector() {
+		if(this.type == PieceType.VOID)return false;
 		for (Orientation ori : this.getConnectors()) {
 			if (ori == Orientation.SOUTH) {
 				return true;
@@ -142,6 +155,7 @@ public class Piece {
 	}
 
 	public boolean hasLeftConnector() {
+		if(this.type == PieceType.VOID)return false;
 		for (Orientation ori : this.getConnectors()) {
 			if (ori == Orientation.WEST) {
 				return true;

@@ -50,9 +50,12 @@ public enum PieceType {
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	
+	
 
 	public Orientation getOrientation(Orientation north) {
-		if(!this.getListOfPossibleOri().contains(north) ) throw new IllegalArgumentException();
+		//if(!this.getListOfPossibleOri().contains(north) ) throw new IllegalArgumentException();
 		switch(north) {
 		case NORTH:
 			return Orientation.NORTH;
@@ -118,6 +121,28 @@ public enum PieceType {
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	public static int getValuefromType(PieceType type) {
+		switch(type) {
+		case VOID :
+			return 0;
+		case ONECONN:
+			return 1;
+		case BAR:
+			return 2;
+		case FOURCONN:
+			return 4;
+		case LTYPE:
+			return 5;
+		case TTYPE:
+			return 3;
+		default:
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	
+	
 
 	public int getNbConnectors() {
 		switch(this) {

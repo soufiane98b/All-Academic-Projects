@@ -13,7 +13,7 @@ public enum Orientation {
 	 */
 	NORTH,EAST,SOUTH,WEST;
 
-	Orientation turn90() {
+	public Orientation turn90() {
 		switch(this){
 		case NORTH:
 			return EAST;
@@ -29,7 +29,7 @@ public enum Orientation {
 		}
 	}
 
-	static Orientation getOrifromValue(int orientationValue) {
+	public static Orientation getOrifromValue(int orientationValue) {
 		switch(orientationValue){
 		case 0:
 			return NORTH;
@@ -39,6 +39,22 @@ public enum Orientation {
 			return SOUTH;
 		case 3:
 			return WEST;
+		default:
+			throw new IllegalArgumentException();
+			
+		}
+	}
+	
+	public static int getValuefromOri(Orientation ori) {
+		switch(ori){
+		case NORTH:
+			return 0;
+		case EAST:
+			return 1;
+		case SOUTH:
+			return 2;
+		case WEST:
+			return 3;
 		default:
 			throw new IllegalArgumentException();
 			
@@ -55,12 +71,15 @@ public enum Orientation {
 		case EAST:
 			cc[0]=p.getPosY(); 
 			cc[1]=p.getPosX()+1;
+			return cc;
 		case WEST:
 			cc[0]=p.getPosY(); 
 			cc[1]=p.getPosX()-1;
+			return cc;
 		case SOUTH:
 			cc[0]=p.getPosY()+1; 
 			cc[1]=p.getPosX();
+			return cc;
 		default:
 			throw new IllegalArgumentException();
 			
