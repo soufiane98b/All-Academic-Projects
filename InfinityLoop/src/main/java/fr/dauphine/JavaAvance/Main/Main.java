@@ -28,7 +28,7 @@ public class Main {
 	private static Integer nbThread = 1;
 	private static Integer algo = 2;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Options options = new Options();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;

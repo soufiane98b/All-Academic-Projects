@@ -490,6 +490,11 @@ public class Grid {
 		}
 		return null;
 	}
+	
+	public Piece leftNeighbor1(Piece p) {
+
+		return this.getPiece(p.getPosY(), p.getPosX() - 1);
+	}
 
 	/**
 	 * Find the top neighbor
@@ -505,6 +510,10 @@ public class Grid {
 			}
 		}
 		return null;
+	}
+	public Piece topNeighbor1(Piece p) {
+
+		return this.getPiece(p.getPosY() - 1, p.getPosX());
 	}
 
 	/**
@@ -522,6 +531,10 @@ public class Grid {
 		}
 		return null;
 	}
+	public Piece rightNeighbor1(Piece p) {
+
+		return this.getPiece(p.getPosY(), p.getPosX() + 1);
+	}
 
 	/**
 	 * Find the bottom neighbor
@@ -538,55 +551,228 @@ public class Grid {
 		}
 		return null;
 	}
+	public Piece bottomNeighbor1(Piece p) {
+
+		return this.getPiece(p.getPosY() + 1, p.getPosX());
+	}
+
 	
 	/**
 	 * by soufiane 
 	 * @param l
 	 * @param c
 	 * @return list of possible PieceType according to the position in the grid
+	 * @throws Exception 
 	 */
-	
-	public ArrayList<Integer> piecePossible(int l , int c){
-		ArrayList<Integer> L = new ArrayList<Integer>();
-		if(isCorner(l,c)) {
-			L.add(0);
-			L.add(1);
-			L.add(5);
-			return L;
-		}
-		if(isBorderLine(l,c) || isBorderColumn(l,c)) {
-			L.add(0);
-			L.add(1);
-			L.add(2);
-			L.add(3);
-			L.add(5);
-			return L;
-		}
-		L.add(0);
-		L.add(1);
-		L.add(2);
-		L.add(3);
-		L.add(4);
-		L.add(5);
-		return L;
-	}
-	
-	
-	public void affect_isfixed_nei(int l, int c) {
-		Piece p = this.getPiece(l,c);
-		PieceType type_p=p.getType();
-		if(type_p==PieceType.LTYPE) {
-			if(isCorner(l,c))p.setFixed(true);
-			if(isBorderLine(l,c) || isBorderColumn(l,c)) {
-					
+	// VOID,ONECONN,BAR,TTYPE,FOURCONN,LTYPE 
+	public ArrayList<Piece> piecePossible(int l , int c) throws Exception {
+		
+		ArrayList<Piece> L = new ArrayList<Piece>();
+		Piece p = getPiece(l,c);
+		Piece top = topNeighbor(p);
+		Piece left = leftNeighbor(p);
+		//System.out.println("piece :"+p);
+		//System.out.println("top :"+top);
+		//System.out.println("left "+left);
+		if(this.isCorner(l, c)) {
+			if(l==0 && c==0) {
+				L.add(new Piece(l,c));
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+				L.add(new Piece(l,c,PieceType.LTYPE,Orientation.EAST));
+				return L;
+				
+			}
+			if(l==0 && c == width-1) {
+				if(left==null || left.hasRightConnector()==false){
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+					return L;
+				}
+				if(left.hasRightConnector()){
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.SOUTH));
+					return L;
 				}
 			}
 			
+			if(l==height-1 && c==0) {
+				if(top==null || top.hasBottomConnector()==false){
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+					return L;
+				}
+				if(top.hasBottomConnector()){
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.NORTH));
+					return L;
+
+				}
+			}
+			
+			if(l==height-1 && c == width-1) {
+		
+				if( (top==null || top.hasBottomConnector()==false) && (left==null ||left.hasRightConnector()==false)  ) {
+					L.add(new Piece(l,c));
+					return L;
+				}
+				
+				if((top==null || top.hasBottomConnector()==false) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+					return L;
+					
+				}
+				if((top!=null && top.hasBottomConnector()==true) && (left==null ||left.hasRightConnector()==false)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+					return L;
+					
+				}
+				
+				if((top!=null && top.hasBottomConnector()==true) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.WEST));
+					return L;
+					
+				}
+				
+			}
+		
 		}
 		
-		
-	}
+		if(this.isBorderLine(l, c)) {
+			if(l==0) {
+				if( left==null || left.hasRightConnector()==false) {
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.EAST));
+					return L;
+				}
+				if( left.hasRightConnector()==true) {
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.SOUTH));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.BAR,Orientation.EAST));
+					L.add(new Piece(l,c,PieceType.TTYPE,Orientation.SOUTH));
+					return L;
+				}
 
+			}
+			if(l==height-1) {
+				if( (top==null || top.hasBottomConnector()==false) && (left==null ||left.hasRightConnector()==false) ) {
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+					return L;
+				}
+				if((top==null || top.hasBottomConnector()==false) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.BAR,Orientation.EAST));
+					return L;
+					
+				}
+				if((top!=null && top.hasBottomConnector()==true) && (left==null ||left.hasRightConnector()==false)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.NORTH));
+					return L;
+					
+				}
+				
+				if((top!=null && top.hasBottomConnector()==true) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.TTYPE,Orientation.NORTH));
+					return L;
+					
+				}
+				
+			}
+
+		}
+		if(this.isBorderColumn(l, c)) {
+			if(c==0) {
+				if( top==null || top.hasBottomConnector()==false) {
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.EAST));
+					return L;
+				}
+				if( top.hasBottomConnector()==true) {
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.BAR,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.TTYPE,Orientation.EAST));
+					return L;
+				}
+
+			}
+			if(c==width-1) {
+				if((top==null || top.hasBottomConnector()==false) && (left==null ||left.hasRightConnector()==false) ) {
+					L.add(new Piece(l,c));
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+					return L;
+				}
+				
+				if((top==null || top.hasBottomConnector()==false) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.SOUTH));
+					return L;
+					
+				}
+				if((top!=null && top.hasBottomConnector()==true) && (left==null ||left.hasRightConnector()==false)) {
+					L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+					L.add(new Piece(l,c,PieceType.BAR,Orientation.NORTH));
+					return L;
+					
+				}
+				
+				if((top!=null && top.hasBottomConnector()==true) && (left!=null && left.hasRightConnector()==true)) {
+					L.add(new Piece(l,c,PieceType.LTYPE,Orientation.WEST));
+					L.add(new Piece(l,c,PieceType.TTYPE,Orientation.WEST));
+					return L;
+					
+				}
+				
+			}
+
+		}
+		
+		else {
+			  
+			if((top==null || top.hasBottomConnector()==false) && (left!=null && left.hasRightConnector()==true)){
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.WEST));
+				L.add(new Piece(l,c,PieceType.LTYPE,Orientation.SOUTH));
+				L.add(new Piece(l,c,PieceType.BAR,Orientation.EAST));
+				L.add(new Piece(l,c,PieceType.TTYPE,Orientation.SOUTH));
+				return L;
+			}
+			
+			if((top!=null && top.hasBottomConnector()==true) && (left==null ||left.hasRightConnector()==false)) {
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.NORTH));
+				L.add(new Piece(l,c,PieceType.BAR,Orientation.NORTH));
+				L.add(new Piece(l,c,PieceType.LTYPE,Orientation.NORTH));
+				L.add(new Piece(l,c,PieceType.TTYPE,Orientation.EAST));
+				return L;
+			}
+			
+			if((top!=null && top.hasBottomConnector()==true) && (left!=null && left.hasRightConnector()==true)) {
+				L.add(new Piece(l,c,PieceType.LTYPE,Orientation.WEST));
+				L.add(new Piece(l,c,PieceType.FOURCONN,Orientation.NORTH));
+				L.add(new Piece(l,c,PieceType.TTYPE,Orientation.WEST));
+				L.add(new Piece(l,c,PieceType.TTYPE,Orientation.NORTH));
+				return L;
+			}
+			if((top==null || top.hasBottomConnector()==false) && (left==null ||left.hasRightConnector()==false)){
+				L.add(new Piece(l,c));
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.EAST));
+				L.add(new Piece(l,c,PieceType.ONECONN,Orientation.SOUTH));
+				L.add(new Piece(l,c,PieceType.LTYPE,Orientation.EAST));
+				return L;
+			}
+
+		}
+		if(L.isEmpty()==true) throw new Exception();
+		return L;
+	
+	}
+	
 	@Override
 	public String toString() {
 
@@ -599,5 +785,535 @@ public class Grid {
 		}
 		return s;
 	}
+	
+	
+	public boolean change(Piece current,Piece direction,boolean connector ,PieceType type,Orientation ori_true, Orientation ori_false,int l,int c ) {
+		
+		if(current.isFixed()==false && direction.isFixed()==true && connector==true && current.getType()==type){this.getPiece(l,c).setOrientation(ori_true);this.getPiece(l,c).setFixed(true);return true;}
+		if( current.isFixed()==false && direction.isFixed()==true && connector==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori_false);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+	public boolean changefalse2(Piece current,Piece direction1,Piece direction2,boolean connector1, boolean connector2 ,PieceType type, Orientation ori_false,int l,int c ) {
+		if(current.isFixed()==false &&  direction1.isFixed()==true && direction2.isFixed()==true && connector1==false && connector2==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori_false);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+	public boolean changefalse3(Piece current,Piece direction1,Piece direction2,Piece direction3,boolean connector1, boolean connector2 ,boolean connector3,PieceType type, Orientation ori_false,int l,int c ) {
+		if(current.isFixed()==false &&  direction1.isFixed()==true && direction2.isFixed()==true && direction3.isFixed()==true  && connector1==false && connector2==false && connector3==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori_false);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+	public boolean changetrue2(Piece current,Piece direction1,Piece direction2,boolean connector1, boolean connector2 ,PieceType type, Orientation ori_true,int l,int c ) {
+		if(current.isFixed()==false &&  direction1.isFixed()==true && direction2.isFixed()==true && connector1==true && connector2==true && current.getType()==type){this.getPiece(l,c).setOrientation(ori_true);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+	public boolean changetrue3(Piece current,Piece direction1,Piece direction2,Piece direction3,boolean connector1, boolean connector2 ,boolean connector3,PieceType type, Orientation ori_true,int l,int c ) {
+		if( current.isFixed()==false && direction1.isFixed()==true && direction2.isFixed()==true && direction3.isFixed()==true  && connector1==true && connector2==true && connector3==true && current.getType()==type){this.getPiece(l,c).setOrientation(ori_true);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+	public boolean changetruefalse2(Piece current,Piece direction1,Piece direction2,boolean connector1, boolean connector2 ,PieceType type, Orientation ori_true,Orientation ori_false,int l,int c ) {
+		if( current.isFixed()==false && direction1.isFixed()==true && direction2.isFixed()==true && connector1==true && connector2==true && current.getType()==type){this.getPiece(l,c).setOrientation(ori_true);this.getPiece(l,c).setFixed(true);return true;}
+		if( current.isFixed()==false && direction1.isFixed()==true && direction2.isFixed()==true && connector1==false && connector2==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori_false);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	public boolean changetruefalseAlt(Piece current,Piece direction1,Piece direction2,boolean connector1, boolean connector2 ,PieceType type, Orientation ori,int l,int c ) {
+		if( current.isFixed()==false && direction1.isFixed()==true && direction2.isFixed()==true && connector1==true && connector2==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori);this.getPiece(l,c).setFixed(true);return true;}
+		return false;	
+	}
+	
+
+	
+	public boolean changetrue(Piece current,Piece direction,boolean connector ,PieceType type,Orientation ori_true,int l,int c ) {
+		if(current.isFixed()==false &&  direction.isFixed()==true && connector==true && current.getType()==type){this.getPiece(l,c).setOrientation(ori_true);this.getPiece(l,c).setFixed(true);return true;}
+		return false;
+		
+	}
+	public boolean changefalse(Piece current,Piece direction,boolean connector ,PieceType type,Orientation ori_false,int l,int c ) {
+		if( current.isFixed()==false && direction.isFixed()==true && connector==false && current.getType()==type){this.getPiece(l,c).setOrientation(ori_false);this.getPiece(l,c).setFixed(true);return true;}
+		return false;
+	}
+	
+	
+	////----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public ArrayList<Orientation> piecePossibleResolution(int l , int c) throws Exception {
+		
+		ArrayList<Orientation> L = new ArrayList<Orientation>();
+		Piece p = getPiece(l,c);
+		if(p.isFixed()==true)return null;
+		//System.out.println("piece :"+p);
+		//System.out.println("top :"+top);
+		//System.out.println("left "+left);
+		
+		//----------------------------------------------- TOUJOURS ORIENTATIONS POSSIBLE * 2 ( TRUE ET FALSE ) >= TOTAL POSSIBILITE POUR CHAQUE PIECE
+		if(this.isCorner(l, c)) { 
+			if(l==0 && c==0) {
+				Piece right = rightNeighbor1(p);
+				Piece bottom = bottomNeighbor1(p);
+				
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.LTYPE) {this.getPiece(l,c).setOrientation(Orientation.EAST);this.getPiece(l,c).setFixed(true);return L;}
+				
+				// RESTE CEUX NON FIXE (ONECONN) ET VIDE 
+				// SI VIDE DROITE
+				boolean d=change(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST, Orientation.SOUTH,l,c);
+				
+				// SI VIDE BAS
+				boolean b=change(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH, Orientation.EAST,l,c);			
+				
+				if(d== true || b==true)return L;
+				L.add(Orientation.SOUTH); 
+				L.add(Orientation.EAST);
+				return L;
+			}
+			if(l==0 && c == width-1) {
+				Piece left = leftNeighbor1(p);
+				Piece bottom = bottomNeighbor1(p);
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.LTYPE) {this.getPiece(l,c).setOrientation(Orientation.SOUTH);this.getPiece(l,c).setFixed(true);return L;}
+				// RESTE CEUX NON FIXE (ONECONN) ET VIDE 
+				// SI VIDE GAUCHE
+				boolean g=change(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST, Orientation.SOUTH,l,c);
+				
+				// SI VIDE BAS
+				boolean b=change(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH, Orientation.WEST,l,c);
+				// RAJOUTER QUE C QUE POUR CAS ONECONN QU'ON A PAS ARRIVE A FIXE EN FONCTION DE SES VOISINS, SI PLUS DE PIECE METTRE DES IF
+				if(g== true || b==true)return L;
+				L.add(Orientation.WEST); 
+				L.add(Orientation.SOUTH);
+				return L;
+			}
+			
+			if(l==height-1 && c==0) {
+				Piece top = topNeighbor1(p);
+				Piece right = rightNeighbor1(p);
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.LTYPE) {this.getPiece(l,c).setOrientation(Orientation.NORTH);this.getPiece(l,c).setFixed(true);return L;}
+				// RESTE CEUX NON FIXE (ONECONN) ET VIDE 
+				// SI VIDE DROIT
+				boolean d=change(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST, Orientation.NORTH,l,c);
+				
+				// SI VIDE BAS
+				boolean b=change(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH, Orientation.EAST,l,c);
+				// RAJOUTER QUE C QUE POUR CAS ONECONN QU'ON A PAS ARRIVE A FIXE EN FONCTION DE SES VOISINS, SI PLUS DE PIECE METTRE DES IF
+				if(d== true || b==true)return L;
+				
+				L.add(Orientation.EAST); 
+				L.add(Orientation.NORTH);
+				return L;
+
+				
+			}
+			
+			if(l==height-1 && c == width-1) {
+				Piece top = topNeighbor1(p);
+				Piece left = leftNeighbor1(p);
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.LTYPE) {this.getPiece(l,c).setOrientation(Orientation.WEST);this.getPiece(l,c).setFixed(true);return L;}
+				
+				// RESTE CEUX NON FIXE (ONECONN) ET VIDE 
+				// SI VIDE GAUCHE
+				boolean g=change(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST, Orientation.NORTH,l,c);
+				
+				// SI VIDE Haut
+				boolean b=change(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH, Orientation.WEST,l,c);
+			
+				// RAJOUTER QUE C QUE POUR CAS ONECONN QU'ON A PAS ARRIVE A FIXE EN FONCTION DE SES VOISINS, SI PLUS DE PIECE METTRE DES IF
+				if(g== true || b==true)return L;
+				L.add(Orientation.WEST); 
+				L.add(Orientation.NORTH);
+				return L;			
+				
+			}
+		
+		}
+		//-----------------------------------------------
+		if(this.isBorderLine(l, c)) {
+			if(l==0) {
+				Piece left = leftNeighbor1(p);
+				Piece right = rightNeighbor1(p);
+				Piece bottom = bottomNeighbor1(p);
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.TTYPE) {this.getPiece(l,c).setOrientation(Orientation.SOUTH);this.getPiece(l,c).setFixed(true);return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.BAR) {this.getPiece(l,c).setOrientation(Orientation.EAST);this.getPiece(l,c).setFixed(true);return L;}
+				
+				// --- ONECONN --- 
+				if(p.getType()==PieceType.ONECONN) {
+	
+					//  GAUCHE FIXE
+					boolean g=changetrue(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST,l,c);
+					
+					//  DROIT  FIXE
+					boolean d=changetrue(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					
+					//  BAS FIXE
+					boolean b=changetrue(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					
+					//  GAUGE DROIT , VIDE GAUCHE BAS , DROIT BAS  (TOUS FALSE)
+					boolean gd=changefalse2(p,left,right,left.hasRightConnector(),right.hasLeftConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					boolean gb=changefalse2(p,left,bottom,left.hasRightConnector(),bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					boolean db=changefalse2(p,right,bottom,right.hasLeftConnector(),bottom.hasTopConnector()  ,PieceType.ONECONN,Orientation.WEST,l,c);
+					
+					
+					//SINON 
+					if(g==true || d==true || b==true || gd==true || gb==true || db==true)return L;
+					L.add(Orientation.WEST); 
+					L.add(Orientation.SOUTH);
+					L.add(Orientation.EAST);
+					return L;
+		
+				}
+				// ---  LTYPE --- 
+				if(p.getType()==PieceType.LTYPE) {
+					
+					// DROIT FIXE
+					boolean d=change(p,right,right.hasLeftConnector() ,PieceType.LTYPE,Orientation.EAST, Orientation.SOUTH,l,c);
+					// GAUCHE FIXE
+					boolean g=change(p,left,left.hasRightConnector() ,PieceType.LTYPE,Orientation.SOUTH, Orientation.EAST,l,c);
+					
+					// BAS FIXE ET DROIT NULL 
+					boolean bd = changetruefalseAlt(p,bottom,right,bottom.hasTopConnector(),right.hasLeftConnector(),PieceType.LTYPE,Orientation.SOUTH ,l,c);
+					
+					// BAS FIXE ET GAUCHE NULL 
+					boolean bg = changetruefalseAlt(p,bottom,left,bottom.hasTopConnector(),left.hasRightConnector(),PieceType.LTYPE,Orientation.EAST ,l,c);
+					
+					if(g==true || d==true || bd==true || bg==true)return L;
+					L.add(Orientation.EAST); 
+					L.add(Orientation.SOUTH);
+					return L;
+
+				}
+				
+				System.out.println(this.getPiece(l,c).getType());
+
+			}
+			if(l==height-1) {
+				Piece left = leftNeighbor1(p);
+				Piece right = rightNeighbor1(p);
+				Piece top = topNeighbor1(p);
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {this.getPiece(l,c).setFixed(true);return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.TTYPE) {this.getPiece(l,c).setOrientation(Orientation.NORTH);this.getPiece(l,c).setFixed(true);return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.BAR) {this.getPiece(l,c).setOrientation(Orientation.EAST);this.getPiece(l,c).setFixed(true);return L;}
+				// --- ONECONN --- 
+				if(p.getType()==PieceType.ONECONN) {
+	
+					//  GAUCHE FIXE
+					boolean g=changetrue(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST,l,c);
+					
+					//  DROIT  FIXE
+					boolean d=changetrue(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					
+					//  HAUT FIXE
+					boolean b=changetrue(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					
+					//  GAUGE DROIT ,  GAUCHE BAS , DROIT BAS  (TOUS FALSE)
+					boolean gd=changefalse2(p,left,right,left.hasRightConnector(),right.hasLeftConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					boolean gb=changefalse2(p,left,top,left.hasRightConnector(),top.hasBottomConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					boolean db=changefalse2(p,right,top,right.hasLeftConnector(),top.hasBottomConnector()  ,PieceType.ONECONN,Orientation.WEST,l,c);
+					
+					//SINON 
+					if(g==true || d==true || b==true || gd==true || gb==true || db==true)return L;
+					L.add(Orientation.WEST); 
+					L.add(Orientation.NORTH);
+					L.add(Orientation.EAST);
+					return L;
+		
+				}
+				// ---  LTYPE --- 
+				if(p.getType()==PieceType.LTYPE) {
+					
+					// DROIT FIXE
+					boolean d=change(p,right,right.hasLeftConnector() ,PieceType.LTYPE,Orientation.NORTH, Orientation.WEST,l,c);
+					// GAUCHE FIXE
+					boolean g=change(p,left,left.hasRightConnector() ,PieceType.LTYPE,Orientation.WEST, Orientation.NORTH,l,c);
+					
+					// HAUT FIXE ET DROIT NULL
+					boolean hd = changetruefalseAlt(p,top,right,top.hasBottomConnector(),right.hasLeftConnector(),PieceType.LTYPE,Orientation.WEST ,l,c);
+					
+					// HAUT FIXE ET GAUCHE NULL 
+					boolean hg = changetruefalseAlt(p,top,left,top.hasBottomConnector(),left.hasRightConnector(),PieceType.LTYPE,Orientation.NORTH ,l,c);
+				
+					//SINON
+					if(g==true || d==true || hd==true || hg==true)return L;
+					L.add(Orientation.WEST); 
+					L.add(Orientation.NORTH);
+					return L;
+
+				}
+				
+			}
+
+		}
+		//-----------------------------------------------
+		if(this.isBorderColumn(l, c)) {
+			if(c==0) {
+				Piece right = rightNeighbor1(p);
+				Piece top = topNeighbor1(p);
+				Piece bottom = bottomNeighbor1(p);
+				
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.TTYPE) {this.getPiece(l,c).setOrientation(Orientation.EAST);this.getPiece(l,c).setFixed(true);return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.BAR) {this.getPiece(l,c).setOrientation(Orientation.NORTH);this.getPiece(l,c).setFixed(true);return L;}
+				
+				
+				if(p.getType()==PieceType.ONECONN) {
+					
+					//  BAS FIXE
+					boolean g=changetrue(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					
+					//  DROIT  FIXE
+					boolean d=changetrue(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					
+					//  HAUT FIXE
+					boolean b=changetrue(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					
+					//  BAS DROIT ,  BAS HAUT , HAUT DROIT  (TOUS FALSE)
+					boolean gd=changefalse2(p,bottom,right,bottom.hasTopConnector(),right.hasLeftConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					boolean gb=changefalse2(p,bottom,top,bottom.hasTopConnector(),top.hasBottomConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+					boolean db=changefalse2(p,right,top,right.hasLeftConnector(),top.hasBottomConnector()  ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					
+					//SINON 
+					if(g==true || d==true || b==true || gd==true || gb==true || db==true)return L;
+					L.add(Orientation.SOUTH); 
+					L.add(Orientation.NORTH);
+					L.add(Orientation.EAST); 
+					return L;
+		
+				}
+				// ---  LTYPE --- 
+				if(p.getType()==PieceType.LTYPE) {
+					
+					// HAUT FIXE
+					boolean d=change(p,top,top.hasBottomConnector() ,PieceType.LTYPE,Orientation.NORTH, Orientation.EAST,l,c);
+					// BAS FIXE
+					boolean g=change(p,bottom,bottom.hasTopConnector() ,PieceType.LTYPE,Orientation.EAST, Orientation.NORTH,l,c);
+					
+					// DROIT FIXE ET HAUT NULL
+					boolean dh = changetruefalseAlt(p,right,top,right.hasLeftConnector(),top.hasBottomConnector(),PieceType.LTYPE,Orientation.EAST ,l,c);
+					
+					
+					// DROIT FIXE ET BAS NULL 
+					boolean db = changetruefalseAlt(p,right,bottom,right.hasLeftConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.NORTH ,l,c);
+					
+				
+					//SINON
+					if(g==true || d==true || dh==true || db==true)return L;
+					L.add(Orientation.EAST); 
+					L.add(Orientation.NORTH);
+					return L;
+
+				}
+				
+			}
+			if(c==width-1) {
+				Piece left = leftNeighbor1(p);
+				Piece top = topNeighbor1(p);
+				Piece bottom = bottomNeighbor1(p);
+				
+				// TOUJOURS FIXE 
+				if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.TTYPE) {this.getPiece(l,c).setOrientation(Orientation.WEST);this.getPiece(l,c).setFixed(true);return L;}
+				if(p.isFixed()==false && p.getType()==PieceType.BAR) {this.getPiece(l,c).setOrientation(Orientation.NORTH);this.getPiece(l,c).setFixed(true);return L;}
+				
+				
+				if(p.getType()==PieceType.ONECONN) {
+					
+					//  BAS FIXE
+					boolean g=changetrue(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					
+					//  GAUCHE  FIXE
+					boolean d=changetrue(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST,l,c);
+					
+					//  HAUT FIXE
+					boolean b=changetrue(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					
+					//  BAS DROIT ,  BAS HAUT , HAUT DROIT  (TOUS FALSE)
+					boolean gd=changefalse2(p,bottom,left,bottom.hasTopConnector(),left.hasRightConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+					boolean gb=changefalse2(p,bottom,top,bottom.hasTopConnector(),top.hasBottomConnector() ,PieceType.ONECONN,Orientation.WEST,l,c);
+					boolean db=changefalse2(p,left,top,left.hasRightConnector(),top.hasBottomConnector()  ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+					
+					//SINON 
+					if(g==true || d==true || b==true || gd==true || gb==true || db==true)return L;
+					L.add(Orientation.SOUTH); 
+					L.add(Orientation.NORTH);
+					L.add(Orientation.WEST); 
+					return L;
+		
+				}
+				// ---  LTYPE --- 
+				if(p.getType()==PieceType.LTYPE) {
+					
+					// HAUT FIXE
+					boolean d=change(p,top,top.hasBottomConnector() ,PieceType.LTYPE,Orientation.WEST, Orientation.SOUTH,l,c);
+					// BAS FIXE
+					boolean g=change(p,bottom,bottom.hasTopConnector() ,PieceType.LTYPE,Orientation.SOUTH, Orientation.WEST,l,c);
+					
+					// GAUCHE FIXE ET HAUT NULL
+					boolean gh = changetruefalseAlt(p,left,top,left.hasRightConnector(),top.hasBottomConnector(),PieceType.LTYPE,Orientation.SOUTH,l,c);
+					
+					
+					// GAUCHE FIXE ET BAS NULL
+					boolean gb = changetruefalseAlt(p,left,bottom,left.hasRightConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.WEST ,l,c);
+				
+					//SINON
+					if(g==true || d==true || gh==true || gb==true)return L;
+					L.add(Orientation.WEST); 
+					L.add(Orientation.SOUTH);
+					return L;
+
+				}
+								
+				
+			}
+
+		}
+		//-----------------------------------------------
+		if(!this.isBorderColumn(l, c) && !this.isBorderLine(l, c) && !this.isCorner(l, c) ) {
+			Piece right = rightNeighbor1(p);
+			Piece left = leftNeighbor1(p);
+			Piece top = topNeighbor1(p);
+			Piece bottom = bottomNeighbor1(p);
+			
+			// TOUJOURS FIXE 
+			if(p.isFixed()==false && p.getType()==PieceType.VOID) {return L;}
+			if(p.isFixed()==false && p.getType()==PieceType.FOURCONN) {this.getPiece(l,c).setOrientation(Orientation.NORTH);this.getPiece(l,c).setFixed(true);return L;}
+			
+			
+			
+			if(p.getType()==PieceType.ONECONN) {
+				//  HAUT FIXE
+				boolean h=changetrue(p,top,top.hasBottomConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+				
+				//  BAS FIXE
+				boolean b=changetrue(p,bottom,bottom.hasTopConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+				
+				//  GAUCHE  FIXE
+				boolean g=changetrue(p,left,left.hasRightConnector() ,PieceType.ONECONN,Orientation.WEST,l,c);
+				
+				//  DROIT FIXE
+				boolean d=changetrue(p,right,right.hasLeftConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+				
+				//  3 FIXE FAUX 
+				boolean f1=changefalse3(p,bottom,left,right,bottom.hasTopConnector(),left.hasRightConnector(),right.hasLeftConnector() ,PieceType.ONECONN,Orientation.NORTH,l,c);
+				boolean f2=changefalse3(p,bottom,top,left,bottom.hasTopConnector(),top.hasBottomConnector(),left.hasRightConnector() ,PieceType.ONECONN,Orientation.EAST,l,c);
+				boolean f3=changefalse3(p,left,top,right,left.hasRightConnector(),top.hasBottomConnector(),right.hasLeftConnector() ,PieceType.ONECONN,Orientation.SOUTH,l,c);
+				boolean f4=changefalse3(p,bottom,top,right,bottom.hasTopConnector(),top.hasBottomConnector(),right.hasLeftConnector()  ,PieceType.ONECONN,Orientation.WEST,l,c);
+				
+				//SINON 
+				if(h==true || b==true || g==true || d==true || f1==true || f2==true || f3==true || f4==true)return L;
+				L.add(Orientation.EAST); 
+				L.add(Orientation.SOUTH); 
+				L.add(Orientation.NORTH);
+				L.add(Orientation.WEST);
+				return L;
+	
+			}
+			if(p.getType()==PieceType.BAR) {
+				
+				// HAUT
+				boolean h = change(p,top,top.hasBottomConnector() ,PieceType.BAR,Orientation.NORTH, Orientation.EAST,l,c);
+				// BAS
+				boolean b = change(p,bottom,bottom.hasTopConnector() ,PieceType.BAR,Orientation.NORTH, Orientation.EAST,l,c);
+				// DROIT
+				boolean d=change(p,right,right.hasLeftConnector() ,PieceType.BAR,Orientation.EAST, Orientation.NORTH,l,c);
+				// GAUCHE
+				boolean g=change(p,left,left.hasRightConnector() ,PieceType.BAR,Orientation.EAST, Orientation.NORTH,l,c);
+				
+				if(h==true || b==true || d==true || g==true)return L;
+				L.add(Orientation.EAST); 
+				L.add(Orientation.NORTH);
+				return L;
+				
+			}
+			if(p.getType()==PieceType.TTYPE) {
+				// HAUT FAUX
+				boolean h=changefalse(p,top,top.hasBottomConnector() ,PieceType.TTYPE,Orientation.SOUTH,l,c);
+				
+				// BAS FAUX
+				boolean b=changefalse(p,bottom,bottom.hasTopConnector() ,PieceType.TTYPE,Orientation.NORTH,l,c);
+				
+				// DROIT FAUX
+				boolean d=changefalse(p,right,right.hasLeftConnector() ,PieceType.TTYPE,Orientation.WEST,l,c);
+				
+				
+				// GAUCHE FAUX
+				boolean g=changefalse(p,left,left.hasRightConnector() ,PieceType.TTYPE,Orientation.EAST,l,c);
+				
+				// 3 FIXE VRAIE 
+				boolean f1=changetrue3(p,bottom,left,right,bottom.hasTopConnector(),left.hasRightConnector(),right.hasLeftConnector() ,PieceType.TTYPE,Orientation.SOUTH,l,c);
+				boolean f2=changetrue3(p,bottom,top,left,bottom.hasTopConnector(),top.hasBottomConnector(),left.hasRightConnector() ,PieceType.TTYPE,Orientation.WEST,l,c);
+				boolean f3=changetrue3(p,left,top,right,left.hasRightConnector(),top.hasBottomConnector(),right.hasLeftConnector() ,PieceType.TTYPE,Orientation.NORTH,l,c);
+				boolean f4=changetrue3(p,bottom,top,right,bottom.hasTopConnector(),top.hasBottomConnector(),right.hasLeftConnector()  ,PieceType.TTYPE,Orientation.EAST,l,c);
+				
+				if(h==true || b==true || g==true || d==true || f1==true || f2==true || f3==true || f4==true)return L;
+				
+				L.add(Orientation.EAST); 
+				L.add(Orientation.NORTH);
+				L.add(Orientation.WEST); 
+				L.add(Orientation.SOUTH);
+				return L;
+				
+			}
+			if(p.getType()==PieceType.LTYPE) {
+
+				boolean hd=changetruefalse2(p,top,right,top.hasBottomConnector(),right.hasLeftConnector() ,PieceType.LTYPE,Orientation.NORTH,Orientation.SOUTH,l,c);
+				boolean db=changetruefalse2(p,right,bottom,right.hasLeftConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.EAST,Orientation.WEST,l,c);
+				boolean bg=changetruefalse2(p,bottom,left,bottom.hasTopConnector(),left.hasRightConnector() ,PieceType.LTYPE,Orientation.SOUTH,Orientation.NORTH,l,c);
+				boolean gh=changetruefalse2(p,left,top,left.hasRightConnector(),top.hasBottomConnector() ,PieceType.LTYPE,Orientation.WEST,Orientation.EAST,l,c);
+				
+				//
+				
+				changetruefalseAlt(p,right,bottom,right.hasLeftConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.NORTH ,l,c);
+				
+				boolean hdf=changetruefalseAlt(p,top,right,top.hasBottomConnector(),right.hasLeftConnector() ,PieceType.LTYPE,Orientation.WEST,l,c);
+				boolean hdf1=changetruefalseAlt(p,top,right,right.hasLeftConnector(),top.hasBottomConnector(),PieceType.LTYPE,Orientation.EAST,l,c);
+				
+				boolean dbf=changetruefalseAlt(p,right,bottom,right.hasLeftConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.NORTH,l,c);
+				boolean dbf1=changetruefalseAlt(p,right,bottom,bottom.hasTopConnector(),right.hasLeftConnector(),PieceType.LTYPE,Orientation.SOUTH,l,c);
+				
+				boolean bgf=changetruefalseAlt(p,bottom,left,bottom.hasTopConnector(),left.hasRightConnector() ,PieceType.LTYPE,Orientation.EAST,l,c);
+				boolean bgf1=changetruefalseAlt(p,bottom,left,left.hasRightConnector(),bottom.hasTopConnector(),PieceType.LTYPE,Orientation.WEST,l,c);
+				
+				boolean ghf=changetruefalseAlt(p,left,top,left.hasRightConnector(),top.hasBottomConnector() ,PieceType.LTYPE,Orientation.SOUTH,l,c);
+				boolean ghf1=changetruefalseAlt(p,left,top,top.hasBottomConnector(),left.hasRightConnector(),PieceType.LTYPE,Orientation.NORTH,l,c);
+				
+				
+				
+				
+				if(hdf1==true || dbf1==true || bgf1==true || ghf1==true)return L;
+				if(hd==true || db==true || bg==true || gh==true || hdf==true || dbf==true || bgf==true || ghf==true)return L;
+				L.add(Orientation.EAST); 
+				L.add(Orientation.NORTH);
+				L.add(Orientation.WEST); 
+				L.add(Orientation.SOUTH);
+				return L;
+			}
+			
+
+
+		}
+		System.out.println("ATTENTIONNNNN");
+		return null;
+	
+	}
+		
+		
+		
+		
+		
+		
+		
+
+	
+	
 
 }

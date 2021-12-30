@@ -88,6 +88,7 @@ public class GUI {
 	 * @return an image icon
 	 */
 	private ImageIcon getImageIcon(Piece p) {
+		return null;
 		//To be implemented
 		
 		
