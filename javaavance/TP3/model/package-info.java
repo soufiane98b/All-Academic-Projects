@@ -1,1 +1,0 @@
-package fr.dauphine.javaavance.model;
